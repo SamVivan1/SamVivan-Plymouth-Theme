@@ -1,0 +1,9 @@
+[Plymouth Theme]
+Name=samvivan
+Description=Custom Branding with Spinner and Animated Watermark
+Comment=forked from Aditya Shakya (@adi1090x)
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/samvivan
+ScriptFile=/usr/share/plymouth/themes/samvivan/samvivan.script
