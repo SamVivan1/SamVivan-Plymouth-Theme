@@ -2,10 +2,17 @@
 
 A high-quality, animated boot splash screen for Linux distributions. This theme features a smooth, optimized animation specifically designed for high-performance laptops and high-resolution displays.
 
+## 🎬 Preview
+
+![SamVivan Preview](SamVivan-Plymouth-Theme/logo.gif)
+
+---
+
 ## 📋 Table of Contents
 - [Features](#features)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
+- [Custom Theme Guide](#custom-theme-guide)
 - [Configuration](#configuration)
 - [Troubleshooting](#troubleshooting)
 - [License](#license)
@@ -23,16 +30,16 @@ A high-quality, animated boot splash screen for Linux distributions. This theme 
 Before installing the SamVivan Plymouth theme, ensure you have the Plymouth boot splash system installed on your system:
 
 ```bash
-sudo apt install plymouth
+sudo apt install plymouth ffmpeg
 ```
 
 > **Note:** Plymouth is available on most Debian/Ubuntu-based distributions. For other distributions (Fedora, Arch, etc.), use your respective package manager.
 
+---
+
 ## 🚀 Installation
 
 ### Step 1: Clone or Download the Theme
-
-If you haven't already, clone this repository or download the theme files:
 
 ```bash
 git clone <repository-url>
@@ -41,15 +48,11 @@ cd SamVivan-Plymouth-Theme
 
 ### Step 2: Copy Theme to Plymouth Directory
 
-Copy the theme to the Plymouth themes directory:
-
 ```bash
 sudo cp -r samvivan /usr/share/plymouth/themes/
 ```
 
 ### Step 3: Register the Theme with Plymouth
-
-Install and register the new theme as an alternative:
 
 ```bash
 sudo update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/samvivan/samvivan.plymouth 100
@@ -57,86 +60,144 @@ sudo update-alternatives --install /usr/share/plymouth/themes/default.plymouth d
 
 ### Step 4: Select the Theme
 
-Choose the SamVivan theme as your default boot splash screen:
-
 ```bash
 sudo update-alternatives --config default.plymouth
 ```
 
-A menu will appear with all available Plymouth themes. **Select the number corresponding to the SamVivan theme** and press Enter.
-
-Example output:
-```
-There are 3 choices for the alternative default.plymouth (providing /usr/share/plymouth/themes/default.plymouth).
-
-  Selection    Path                                              Priority   Status
-----
-  0            /usr/share/plymouth/themes/ubuntu/ubuntu.plymouth 100       auto mode
-* 1            /usr/share/plymouth/themes/samvivan/samvivan.plymouth 100   manual mode
-  2            /usr/share/plymouth/themes/spinner/spinner.plymouth 50      manual mode
-
-Press <enter> to keep the current choice[*], or type selection number: 1
-```
-
 ### Step 5: Update Initramfs
-
-After selecting the theme, rebuild the initial ramdisk to apply the changes:
 
 ```bash
 sudo update-initramfs -u
 ```
 
-This command may take a minute or two depending on your system. Wait for it to complete before rebooting.
-
-### Step 6: Verify Installation
-
-Reboot your system to see the new Plymouth theme in action:
+### Step 6: Reboot
 
 ```bash
 sudo reboot
 ```
 
-The SamVivan theme should now display during the boot process.
+---
+
+## 🎨 Custom Theme Guide
+
+Want to create your own custom Plymouth animation? Here’s the workflow used in this project:
+
+### 1. Create Your Logo (SVG)
+
+Use AI tools like Gemini to generate your logo.
+
+- Ask Gemini to export the logo in `.svg` format
+- SVG is recommended because:
+  - High resolution (no pixelation)
+  - Easy to animate in Lottie-based tools
+
+---
+
+### 2. Animate Using LottieLab
+
+Import your SVG into LottieLab and create your animation.
+
+- Keep animation smooth and not too heavy
+- Loop-friendly animation works best for boot screens
+
+---
+
+### 3. Export Animation as Video
+
+After finishing the animation:
+
+- Export it as a video (e.g. `.mp4`)
+
+---
+
+### 4. Convert Video to Frames (ffmpeg)
+
+Use ffmpeg to extract frames:
+
+```bash
+ffmpeg -i animation.mp4 progress-%d.png
+```
+
+Important:
+- Rename frames so they start from 0
+- Final naming format must be:
+
+progress-0.png  
+progress-1.png  
+progress-2.png  
+
+---
+
+### 5. Set Resolution
+
+This project uses:
+
+800 x 600
+
+But you are free to use any resolution. Just make sure:
+- All frames have the same size
+- It matches your Plymouth script configuration
+
+---
+
+### 6. Place Files in Theme Folder
+
+Your structure should look like:
+
+samvivan/  
+├── samvivan.plymouth  
+├── samvivan.script  
+├── progress-0.png  
+├── progress-1.png  
+├── progress-2.png  
+
+All frame images must be in the same folder as `.plymouth` and `.script`.
+
+---
+
+### 7. Done 🎉
+
+Rebuild initramfs and reboot:
+
+```bash
+sudo update-initramfs -u
+sudo reboot
+```
+
+Your custom animation should now appear during boot.
+
+---
 
 ## ⚙️ Configuration
 
-The theme's configuration can be modified by editing the Plymouth script:
+- Main script: `samvivan.script`
+- Theme config: `samvivan.plymouth`
 
-- **Main script:** `samvivan.script` - Contains animation and visual settings
-- **Theme configuration:** `samvivan.plymouth` - Plymouth metadata file
+You can tweak animation speed, frame count, and positioning inside the script.
 
-> **Note:** Most users will not need to modify these files. Only edit them if you have specific customization requirements.
+---
 
 ## 🔧 Troubleshooting
 
-### Theme doesn't appear during boot
+### Theme doesn't appear
 
-1. Verify the theme was installed correctly:
-   ```bash
-   ls /usr/share/plymouth/themes/samvivan/
-   ```
+```bash
+ls /usr/share/plymouth/themes/samvivan/
+sudo update-alternatives --config default.plymouth
+sudo update-initramfs -u
+```
 
-2. Check that the theme is selected:
-   ```bash
-   sudo update-alternatives --config default.plymouth
-   ```
-
-3. Make sure initramfs was updated:
-   ```bash
-   sudo update-initramfs -u
-   ```
+---
 
 ### Black screen during boot
 
-- This is often a display scaling issue. Try disabling Plymouth animations:
-  ```bash
-  sudo plymouth-set-default-theme spinner
-  ```
-- Then re-enable with: `sudo update-alternatives --config default.plymouth`
+```bash
+sudo plymouth-set-default-theme spinner
+```
+
+---
 
 ### Remove the theme
-
-If you want to uninstall the SamVivan theme:
 
 ```bash
 sudo update-alternatives --remove default.plymouth /usr/share/plymouth/themes/samvivan/samvivan.plymouth
@@ -144,18 +205,21 @@ sudo rm -rf /usr/share/plymouth/themes/samvivan/
 sudo update-initramfs -u
 ```
 
+---
+
 ## 📁 File Structure
 
-```
-samvivan/
-├── samvivan.plymouth          # Plymouth theme metadata
-└── samvivan.script            # Animation and theme logic
-```
-
-## 📄 License
-
-This theme is released under the terms specified in the LICENSE file. Please see [LICENSE](LICENSE) for more details.
+samvivan/  
+├── samvivan.plymouth  
+├── samvivan.script  
+├── progress-*.png  
 
 ---
 
-**Enjoy your new boot experience!** 🎉
+## 📄 License
+
+This theme is released under the terms specified in the LICENSE file. Please see LICENSE for more details.
+
+---
+
+Enjoy your new boot experience! 🎉
