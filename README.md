@@ -2,6 +2,12 @@
 
 A high-quality, animated boot splash screen for Linux distributions. This theme features a smooth, optimized animation specifically designed for high-performance laptops and high-resolution displays.
 
+## 🎬 Preview
+
+![SamVivan Preview](SamVivan-Plymouth-Theme/logo.gif)
+
+---
+
 ## 📋 Table of Contents
 - [Features](#features)
 - [Prerequisites](#prerequisites)
