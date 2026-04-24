@@ -4,7 +4,7 @@ A high-quality, animated boot splash screen for Linux distributions. This theme 
 
 ## 🎬 Preview
 
-![SamVivan Preview](SamVivan-Plymouth-Theme/logo.gif)
+![SamVivan Preview](logo.gif)
 
 ---
 
